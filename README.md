@@ -1,11 +1,6 @@
 # Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations
 [Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao) 
 
-<style>
-p{
-    text-color:red;
-}
-</style>
 
 ## Overview
 In light of growing threats posed by climate change in general and sea level rise (SLR) in particular, the necessity for computationally efficient means to estimate and analyze potential coastal flood hazards has become increasingly pressing. Data-driven supervised learning methods serve as promising candidates that can dramatically expedite the process, thereby eliminating the ***computational bottleneck*** associated with traditional physics-based hydrodynamic simulators. Yet, the development of accurate and reliable coastal flood prediction models, especially those based on Deep Learning (DL) techniques, has been plagued with two major issues: (1) ***the scarcity of training data*** and (2) the high-dimensional output required for detailed inundation mapping.  To reinforce the arsenal of coastal inundation metamodeling techniques, we present a data-driven framework for synthesizing accurate and reliable DL-based coastal flood prediction models in ***low-resource learning settings***. The core idea behind the framework, which is graphically summarized in Fig. 1 below, is to recast the underlying multi-output regression problem as a computer vision task of translating a two-dimensional segmented grid into a matching grid with real-valued entries corresponding to water depths. 
