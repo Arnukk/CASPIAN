@@ -1,5 +1,7 @@
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yingkaisha/keras-unet-collection/graphs/commit-activity)  [![DOI](https://img.shields.io/badge/DOI-10.7910/DVN/M9625R-blue)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/M9625R) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40arnukk&style=social&url=https%3A%2F%2Fx.com%2F)](https://x.com/arnukk)
 # Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations
-[Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao) 
+[Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao)
+
 
 ## Overview
 In light of growing threats posed by climate change in general and sea level rise (SLR) in particular, the necessity for computationally efficient means to estimate and analyze potential coastal flood hazards has become increasingly pressing. Data-driven supervised learning methods serve as promising candidates that can dramatically expedite the process, thereby eliminating the ***computational bottleneck*** associated with traditional physics-based hydrodynamic simulators. Yet, the development of accurate and reliable coastal flood prediction models, especially those based on Deep Learning (DL) techniques, has been plagued with two major issues: (1) ***the scarcity of training data*** and (2) the high-dimensional output required for detailed inundation mapping.  To reinforce the arsenal of coastal inundation metamodeling techniques, we present a data-driven framework for synthesizing accurate and reliable DL-based coastal flood prediction models in ***low-resource learning settings***. The core idea behind the framework, which is graphically summarized in Fig. 1 below, is to recast the underlying multi-output regression problem as a computer vision task of translating a two-dimensional segmented grid into a matching grid with real-valued entries corresponding to water depths. 
@@ -48,5 +50,43 @@ url = {https://doi.org/10.7910/DVN/M9625R}
 
 ## Repository Structure
 
-TBA
+- `data` includes the raw data, as well as the datasets (in  `tf.data.Dataset` format) created from it, based on which the coastal flood prediction models were trained, validated and tested.
+- `models` contains the implementation of the models (in `tensorflow.keras` v 2.1 ) along with the weights of the trained models (in `h5` format).
+- `model_training.ipynb` provides a sample code for training Deep Vision-based coastal flood prediction models with the proposed  approach.
+- `performance_evaluation.ipynb` includes a sample code for assessing the performance of the developed models and visualizing predictions (see also `Illustrations.ipynb`).
 
+## Training From Scratch
+
+To re-train the aforementioned three models (SWIN-Unet, Attention U-net, CASPIAN):
+
+1: Open `model_training.ipynb`, select the model and define your desired hyperparameters:
+```python
+grid_size = 1024
+AUTOTUNE = tf.data.AUTOTUNE
+batch_size = 2
+split = 1
+output_1d = False
+EPOCHS = 200
+
+MODEL_NAME = "CASPIAN"
+LR = 0.0008
+MIN_LR = LR/10
+WARMUP_EPOCHS = 20
+```
+2: Load the dataset:
+```python
+ds = {
+    'train': tf.data.Dataset.load("./data/train_ds_aug_split_%d" % split).map(lambda f,x,y,yf: tf.py_function(clear_ds, 
+                                           inp=[f,x,y,yf, output_1d], 
+                                           Tout=[tf.float32, tf.float32])),
+    'val': tf.data.Dataset.load("./data/val_ds_aug_split_%d" % split).map(lambda f,x,y,yf: tf.py_function(clear_ds, 
+                                           inp=[f,x,y,yf, output_1d], 
+                                           Tout=[tf.float32, tf.float32]))
+}
+```
+In the current implementation, the models are trained on pre-augmented datasets. To recreate these datasets run the `data/Dataset_construction.ipynb` notebook. For a more memory-efficient implementation the augmentation can be performed on the fly during the training by passing a data generator to the `model.fit()` function.
+
+3: Select the remaining hyperparameters and run the notebook.
+
+## Applying the Trained Models:
+TBA
