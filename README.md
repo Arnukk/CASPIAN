@@ -1,6 +1,6 @@
-<p align="right">[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yingkaisha/keras-unet-collection/graphs/commit-activity)  [![DOI](https://img.shields.io/badge/DOI-10.7910/DVN/M9625R-blue)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/M9625R) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40arnukk&style=social&url=https%3A%2F%2Fx.com%2F)](https://x.com/arnukk)</p>
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yingkaisha/keras-unet-collection/graphs/commit-activity)  [![DOI](https://img.shields.io/badge/DOI-10.7910/DVN/M9625R-blue)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/M9625R) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40arnukk&style=social&url=https%3A%2F%2Fx.com%2F)](https://x.com/arnukk)
 # Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations
-<p align="center">[Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao)</p>
+[Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao)
 
 
 ## Overview
@@ -90,4 +90,3 @@ In the current implementation, the models are trained on pre-augmented datasets.
 
 ## Applying the Trained Models:
 TBA
-
