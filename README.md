@@ -1,4 +1,5 @@
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yingkaisha/keras-unet-collection/graphs/commit-activity)  [![DOI](https://img.shields.io/badge/DOI-10.7910/DVN/M9625R-blue)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/M9625R) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40arnukk&style=social&url=https%3A%2F%2Fx.com%2F)](https://x.com/arnukk)
+
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/yingkaisha/keras-unet-collection/graphs/commit-activity) [![arXiv](https://img.shields.io/badge/arXiv-2406.15451-b31b1b.svg)](https://arxiv.org/abs/2406.15451)  [![DOI](https://img.shields.io/badge/DOI-10.7910/DVN/M9625R-blue)](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/M9625R) [![Twitter](https://img.shields.io/twitter/url.svg?label=Follow%20%40arnukk&style=social&url=https%3A%2F%2Fx.com%2F)](https://x.com/arnukk)
 # Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations
 [Areg Karapetyan](https://scholar.google.com/citations?user=MPNNFXMAAAAJ&hl=en&oi=ao), Aaron Chung Hin Chow, [Samer Madanat](https://scholar.google.com/citations?user=1OiQJ-EAAAAJ&hl=en&oi=ao)
 
@@ -23,16 +24,16 @@ The proposed methodology was tested on different neural networks, including two 
 
 Lastly, we provide a carefully curated [database of synthetic flood inundation maps](https://doi.org/10.7910/DVN/M9625R) of Abu Dhabi's coast for $174$ different shoreline protection scenarios. The maps were generated via a high-fidelity physics-based hydrodynamic simulator under a 0.5-meter SLR projection. The provided dataset, to the best of our knowledge, is the **first of its kind**, and thus can serve as a benchmark for evaluating future coastal flooding metamodels.
 
-This repository contains the complete source code and data for reproducing the results reported in the paper. The proposed framework and models were implemented in `tensorflow.keras` (v 2.1). The weights of all the trained DL models are included.
+This repository contains the complete source code and data for reproducing the results reported in [(Karapetyan et al., 2024)](https://arxiv.org/abs/2406.15451). The proposed framework and models were implemented in `tensorflow.keras` (v 2.1). The weights of all the trained DL models are included.
 
 The implementations of the SWIN-Unet and Attention U-net were adapted from the [keras-unet-collection](https://github.com/yingkaisha/keras-unet-collection) repository of [Yingkai (Kyle) Sha](https://github.com/yingkaisha).
 
 For citing this work or the dataset, please use the below references.
 ```bibtex
-@article{karapetyan2024,
-  title={{Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations}},
-  author={Karapetyan,Areg and Chow, Chung Hin Aaron and Madanat, Samer},
-  journal={arXiv preprint},
+@article{karapetyan2024deep,
+  title={Deep Vision-Based Framework for Coastal Flood Prediction Under Climate Change Impacts and Shoreline Adaptations},
+  author={Karapetyan, Areg and Chow, Aaron Chung Hin and Madanat, Samer},
+  journal={arXiv preprint arXiv:2406.15451},
   year={2024}
 }
 
@@ -84,9 +85,34 @@ ds = {
                                            Tout=[tf.float32, tf.float32]))
 }
 ```
-In the current implementation, the models are trained on pre-augmented datasets. To recreate these datasets run the `data/Dataset_construction.ipynb` notebook. For a more memory-efficient implementation the augmentation can be performed on the fly during the training by passing a data generator to the `model.fit()` function.
+In the current implementation, the training and validation datasets are assumed to be pre-augmented. To recreate these datasets run the `data/Dataset_construction.ipynb` notebook. For a more memory-efficient implementation the augmentation can be performed on the fly during the training by passing a data generator to the `model.fit()` function.
 
-3: Select the remaining hyperparameters and run the notebook.
+3: Select the remaining hyperparameters, callbacks and initiate the training:
+```
+model.summary()
+
+history_warmup = model.fit(ds['train'],
+                epochs=WARMUP_EPOCHS,
+                validation_data=ds['val'],
+                callbacks=[checkpoint, tensorboard_callback, warm_up_lr]) #PrintLearningRate()#reduce_lr#early_stop
+
+model.load_weights("./models/trained_models/%s/initial/" % MODEL_NAME)
+history = model.fit(ds['train'],
+                epochs=EPOCHS,
+                validation_data=ds['val'],
+                callbacks=[checkpoint, tensorboard_callback, early_stop, reduce_lr]) #PrintLearningRate()#reduce_lr#early_stop
+
+model.load_weights("./models/trained_models/%s/initial/" % MODEL_NAME)
+model.save("./models/trained_models/"+MODEL_NAME+"_split_{}".format(str(split)), save_format='h5')
+```
 
 ## Applying the Trained Models:
-TBA
+
+To ensure the robustness of the results, the models were trained on three (randomly generated) data splits. To produce a flood inundation map with the trained models for a given *shoreline protection scenario*, select a split, load the corresponding weights of the chosen trained model, and provide the input *hypothetical flood susceptibility map*:
+```
+model = tf.keras.models.load_model("./models/trained_models/"+MODEL_NAME+"_split_{}".format(str(split)), compile=False)
+                                                      
+for sample in ds_eval['test'].as_numpy_iterator():
+    scenario, input_grid, label, label_flat = sample
+    pred = model.predict(input_grid)[0, :, :, 0]
+```
