@@ -12,7 +12,7 @@ Aaron Chung Hin Chow,
 
 <br>
 <p>
-<b>Overview</b> 
+<b>Overview</b></br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 </p>
 
@@ -69,7 +69,7 @@ url = {https://doi.org/10.7910/DVN/M9625R}
 
 <br>
 <p>
-<b>Repository Structure</b> 
+<b>Repository Structure</b></br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 </p>
 
@@ -81,7 +81,7 @@ url = {https://doi.org/10.7910/DVN/M9625R}
 
 <br>
 <p>
-<b>Model Training (from scratch)</b> 
+<b>Model Training (from scratch)</b></br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 </p>
 
@@ -118,7 +118,7 @@ In the current implementation, the models are trained on pre-augmented datasets.
 
 <br>
 <p>
-<b> Applying the Trained Models</b> 
+<b> Applying the Trained Models</b></br>
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 </p>
 
